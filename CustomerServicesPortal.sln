@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portal.Web", "Portal.Web\Po
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portal.Services", "Portal.Services\Portal.Services.csproj", "{148AC027-1FEF-4A05-A56D-31A49CE875EE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", "{C9CD4FE9-8F1B-443B-A817-8FE0CAF9A20C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portal.Data", "Data\Portal.Data.csproj", "{C9CD4FE9-8F1B-443B-A817-8FE0CAF9A20C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
