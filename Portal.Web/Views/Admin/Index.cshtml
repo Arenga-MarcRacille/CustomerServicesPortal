@@ -83,18 +83,26 @@
                                 }
                             </td>
                             <td>
-                                <form asp-action="UpdateStatus" method="post" class="d-flex align-items-center gap-2">
-                                    <input type="hidden" name="ticketId" value="@ticket.TicketId" />
+                                <div class="d-flex align-items-center gap-2">
+                                    <a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.TicketId"
+                                       class="btn btn-sm btn-outline-primary" title="View Details">
+                                        <i class="bi bi-eye-fill"></i>
+                                        View Details
+                                    </a>
 
-                                    <select name="statusId" class="form-select form-select-sm" style="width: 130px;">
-                                        <option value="5" selected="@(ticket.TicketStatus.StatusName == "Open")">Open</option>
-                                        <option value="6" selected="@(ticket.TicketStatus.StatusName == "InProgress")">In Progress</option>
-                                        <option value="7" selected="@(ticket.TicketStatus.StatusName == "Resolved")">Resolved</option>
-                                        <option value="8" selected="@(ticket.TicketStatus.StatusName == "Closed")">Closed</option>
-                                    </select>
+                                    <form asp-action="UpdateStatus" method="post" class="d-flex align-items-center gap-2">
+                                        <input type="hidden" name="ticketId" value="@ticket.TicketId" />
 
-                                    <button type="submit" class="btn btn-sm btn-dark">Update</button>
-                                </form>
+                                        <select name="statusId" class="form-select form-select-sm" style="width: 120px;">
+                                            <option value="5" selected="@(ticket.TicketStatus.StatusName == "Open")">Open</option>
+                                            <option value="6" selected="@(ticket.TicketStatus.StatusName == "InProgress")">In Progress</option>
+                                            <option value="7" selected="@(ticket.TicketStatus.StatusName == "Resolved")">Resolved</option>
+                                            <option value="8" selected="@(ticket.TicketStatus.StatusName == "Closed")">Closed</option>
+                                        </select>
+
+                                        <button type="submit" class="btn btn-sm btn-dark">Update</button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                     }

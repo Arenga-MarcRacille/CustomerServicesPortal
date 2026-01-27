@@ -66,11 +66,33 @@ namespace Portal.Web.Controllers
         }
 
         // GET: Details (Requirement: Ticket Details with Timeline)
+        [Authorize(Roles = "Admin, Client")]
         public async Task<IActionResult> Details(int id)
         {
+            // 1. Fetch the ticket with all includes (Asset, Client, Status, etc.)
             var ticket = await _ticketService.GetTicketDetailsAsync(id);
-            if (ticket == null) return NotFound();
 
+            // 2. Global Null Check: If it doesn't exist in DB, nobody sees it.
+            if (ticket == null)
+            {
+                return NotFound();
+            }
+
+            // 3. Security Check: If the user is a Client, they must OWN this ticket.
+            if (User.IsInRole("Client"))
+            {
+                // Get the logged-in User's Name (or ID if you have it in claims)
+                var currentUsername = User.Identity.Name;
+
+                // Verify if the ticket's client username matches the logged-in user
+                if (ticket.Client.User.Username != currentUsername)
+                {
+                    return Forbid(); // Or return NotFound() if you want to be sneaky
+                }
+            }
+
+            // 4. Admins pass through automatically because of the [Authorize] attribute 
+            // and the fact that we don't restrict them by ClientId.
             return View(ticket);
         }
 
