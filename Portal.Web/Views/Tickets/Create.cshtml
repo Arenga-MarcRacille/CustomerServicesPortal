@@ -1,0 +1,36 @@
+﻿@model Portal.Data.ViewModels.CreateTicketViewModel
+
+<h2>Submit a New Ticket</h2>
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="mb-3">
+                <label asp-for="Title" class="form-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="AssetId" class="form-label">Select Asset</label>
+                <select asp-for="AssetId" class="form-select" asp-items="ViewBag.AssetId"></select>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Description" class="form-label"></label>
+                <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Attachment" class="form-label"></label>
+                <input asp-for="Attachment" type="file" class="form-control" />
+            </div>
+
+            <button type="submit" class="btn btn-success">Submit Ticket</button>
+            <a asp-controller="Dashboard" asp-action="Index" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>

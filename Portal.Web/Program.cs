@@ -11,6 +11,9 @@ builder.Services.AddDbContext<PortalWebContext>(options =>
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<Portal.Services.Interfaces.IAccountService, Portal.Services.AccountService>();
+builder.Services.AddScoped<Portal.Services.Interfaces.ITicketService, Portal.Services.TicketService>();
+builder.Services.AddScoped<Portal.Services.Interfaces.IAssetService, Portal.Services.AssetService>();
+
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>

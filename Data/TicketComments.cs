@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Portal.Data.Data; // Check namespace for Users class
 
 namespace Portal.Data
 {
@@ -17,6 +14,11 @@ namespace Portal.Data
         public int TicketId { get; set; }
         [ForeignKey("TicketId")]
         public Tickets Ticket { get; set; }
+
+        [Required]
+        public int UserId { get; set; }
+        [ForeignKey("UserId")]
+        public Users User { get; set; }
 
         [Required]
         public string CommentText { get; set; }

@@ -1,0 +1,48 @@
+﻿@model Portal.Data.Assets
+
+@{
+    ViewData["Title"] = "Register Asset";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-dark text-white">
+                    <h4>Register New Asset</h4>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Assign to Client</label>
+                            <select asp-for="ClientId" class="form-select" asp-items="ViewBag.ClientId">
+                                <option value="">-- Select Owner --</option>
+                            </select>
+                            <span asp-validation-for="ClientId" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="AssetName" class="form-label">Asset Name / Unit No.</label>
+                            <input asp-for="AssetName" class="form-control" placeholder="e.g., Unit 402 Tower B" />
+                            <span asp-validation-for="AssetName" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="AssetType" class="form-label">Type</label>
+                            <select asp-for="AssetType" class="form-select">
+                                <option value="Real Estate">Real Estate</option>
+                                <option value="Vehicle">Vehicle</option>
+                                <option value="Equipment">Equipment</option>
+                            </select>
+                            <span asp-validation-for="AssetType" class="text-danger"></span>
+                        </div>
+
+                        <button type="submit" class="btn btn-success w-100">Register Asset</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

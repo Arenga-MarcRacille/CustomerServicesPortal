@@ -1,0 +1,153 @@
+﻿@model Portal.Data.Tickets
+@using Portal.Data
+
+@{
+    ViewData["Title"] = $"Ticket #{Model.TicketId}";
+    var statusColor = Model.TicketStatus.StatusName switch
+    {
+        "Open" => "bg-danger",
+        "InProgress" => "bg-warning text-dark",
+        "Resolved" => "bg-success",
+        "Closed" => "bg-secondary"
+    };
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="mb-1">
+                <i class="bi bi-ticket-detailed"></i> Ticket #@Model.TicketId: @Model.Title
+            </h2>
+            <p class="text-muted mb-0">
+                Created on @Model.CreatedAt.ToString("MMMM dd, yyyy")
+                <span class="mx-2">|</span>
+                Owner: <strong>@Model.Client.FullName</strong>
+            </p>
+        </div>
+        <div>
+            <span class="badge @statusColor fs-5 px-4 py-2 rounded-pill">
+                @Model.TicketStatus.StatusName
+            </span>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0"><i class="bi bi-info-circle"></i> Issue Details</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="small text-muted fw-bold">ASSET / PROPERTY</label>
+                            <div class="fs-5 text-primary">
+                                <i class="bi bi-building"></i> @Model.Asset.AssetName
+                            </div>
+                            <small class="text-muted">Type: @Model.Asset.AssetType</small>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="small text-muted fw-bold">CURRENT STATUS</label>
+                            <div class="fs-5">@Model.TicketStatus.StatusName</div>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <label class="small text-muted fw-bold">DESCRIPTION</label>
+                    <p class="mt-1" style="white-space: pre-line;">@Model.Description</p>
+
+                    @if (Model.DocumentRequests != null && Model.DocumentRequests.Any())
+                    {
+                        <div class="mt-4 p-3 bg-light rounded border">
+                            <h6 class="text-dark mb-2"><i class="bi bi-paperclip"></i> Attachments</h6>
+                            <div class="d-flex gap-2 flex-wrap">
+                                @foreach (var doc in Model.DocumentRequests)
+                                {
+                                    <a href="@doc.FilePath" download target="_blank" class="btn btn-sm btn-outline-secondary bg-white">
+                                        <i class="bi bi-file-earmark-text"></i> @doc.DocumentName
+                                    </a>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="card shadow-sm mb-5">
+                <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="bi bi-chat-dots"></i> Comments</h5>
+                    <span class="badge bg-light text-dark">@Model.Comments?.Count() comments</span>
+                </div>
+                <div class="card-body bg-light">
+                    <div class="border rounded bg-white p-3 mb-3" style="max-height: 400px; overflow-y: auto;">
+                        @if (Model.Comments != null && Model.Comments.Any())
+                        {
+                            foreach (var comment in ((IEnumerable<TicketComments>)Model.Comments).OrderBy(c => c.CreatedAt))
+                            {
+                                var isMe = User.Identity.Name == comment.User?.Username;
+                                var alignClass = isMe ? "text-end" : "text-start";
+                                var bubbleColor = isMe ? "bg-primary text-white" : "bg-light border text-dark";
+
+                                <div class="mb-3 @alignClass">
+                                    <div class="d-inline-block text-start p-2 rounded shadow-sm @bubbleColor" style="max-width: 75%;">
+                                        <strong class="d-block small border-bottom mb-1 pb-1 border-opacity-25">
+                                            @(comment.User?.Username ?? "Unknown")
+                                        </strong>
+                                        <span>@comment.CommentText</span>
+                                    </div>
+                                    <div class="small text-muted mt-1" style="font-size: 0.75rem;">
+                                        @comment.CreatedAt.ToString("MMM dd, HH:mm")
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="text-center text-muted py-4">
+                                <p class="mb-0">No comments yet.</p>
+                            </div>
+                        }
+                    </div>
+
+                    <form asp-action="AddComment" method="post">
+                        <input type="hidden" name="ticketId" value="@Model.TicketId" />
+                        <div class="input-group">
+                            <textarea name="commentText" class="form-control" rows="2" placeholder="Type your message..." required></textarea>
+                            <button class="btn btn-dark" type="submit">Send</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white border-bottom-0 pt-4 pb-0">
+                    <h5 class="text-muted"><i class="bi bi-clock-history"></i> History Timeline</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.Timelines != null && Model.Timelines.Any())
+                    {
+                        <ul class="list-group list-group-flush border-start border-3 ps-3">
+                            @foreach (var log in Model.Timelines.OrderByDescending(t => t.LogDate))
+                            {
+                                <li class="list-group-item bg-transparent border-0 ps-0 pb-4">
+                                    <small class="text-muted fw-bold d-block">
+                                        @log.LogDate.ToString("MMM dd, HH:mm")
+                                    </small>
+                                    <span class="text-dark">@log.ActivityDescription</span>
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p class="text-muted fst-italic">No history recorded.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
