@@ -1,33 +1,89 @@
 ﻿@model IEnumerable<Portal.Data.ViewModels.TicketViewModel>
 
-<h2>My Tickets</h2>
+@{
+    ViewData["Title"] = "My Tickets";
+}
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Date</th>
-            <th>Title</th>
-            <th>Asset</th>
-            <th>Status</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var ticket in Model)
-        {
-            <tr>
-                <td>@ticket.CreatedAt.ToShortDateString()</td>
-                <td>@ticket.Title</td>
-                <td>@ticket.AssetName</td>
-                <td>
-                    <span class="badge @(ticket.StatusName == "Open" ? "bg-success" : "bg-secondary")">
-                        @ticket.StatusName
-                    </span>
-                </td>
-                <td>
-                    <a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.TicketId">View</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold text-dark"><i class="bi bi-list-task text-primary me-2"></i>My Tickets</h2>
+            <p class="text-muted small mb-0">Track and manage your submitted service requests</p>
+        </div>
+        <a asp-controller="Tickets" asp-action="Create" class="btn btn-primary shadow-sm px-4">
+            <i class="bi bi-plus-lg me-1"></i> New Ticket
+        </a>
+    </div>
+
+    <div class="card shadow-sm border-0 rounded-3">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-4 py-3">Date</th>
+                            <th class="py-3">Title / Issue</th>
+                            <th class="py-3">Asset</th>
+                            <th class="py-3 text-center">Status</th>
+                            <th class="pe-4 py-3 text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            foreach (var ticket in Model)
+                            {
+                                var statusClass = ticket.StatusName switch
+                                {
+                                    "Open" => "bg-danger",
+                                    "InProgress" => "bg-warning text-dark",
+                                    "Resolved" => "bg-success",
+                                    "Closed" => "bg-secondary",
+                                    _ => "bg-info"
+                                };
+
+                                <tr>
+                                    <td class="ps-4">
+                                        <div class="fw-bold text-dark">@ticket.CreatedAt.ToString("MMM dd")</div>
+                                        <small class="text-muted">@ticket.CreatedAt.ToString("yyyy")</small>
+                                    </td>
+                                    <td>
+                                        <span class="d-block fw-semibold text-dark">@ticket.Title</span>
+                                        <small class="text-muted">Ticket ID: #@ticket.TicketId</small>
+                                    </td>
+                                    <td>
+                                        <span class="badge border text-dark fw-normal bg-white">
+                                            <i class="bi bi-building me-1"></i> @ticket.AssetName
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="badge @statusClass rounded-pill px-3 py-2" style="min-width: 100px;">
+                                            @ticket.StatusName
+                                        </span>
+                                    </td>
+                                    <td class="pe-4 text-end">
+                                        <a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.TicketId"
+                                           class="btn btn-sm btn-outline-primary px-3 rounded-pill">
+                                            View Details <i class="bi bi-chevron-right ms-1"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="5" class="text-center py-5">
+                                    <div class="text-muted">
+                                        <i class="bi bi-inbox display-4 d-block mb-3"></i>
+                                        <p>You haven't submitted any tickets yet.</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

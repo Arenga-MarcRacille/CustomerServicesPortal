@@ -4,56 +4,80 @@
     ViewData["Title"] = "Register";
 }
 
-<div class="container mt-5">
+<div class="container mt-5 mb-5">
     <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow">
-                <div class="card-header bg-success text-white">
-                    <h4>Create Client Account</h4>
+        <div class="col-md-7 col-lg-6">
+            <div class="text-center mb-4">
+                <div class="display-6 fw-bold text-success">
+                    <i class="bi bi-person-check-fill"></i>
                 </div>
-                <div class="card-body">
+                <h2 class="fw-bold text-dark">Create Account</h2>
+                <p class="text-muted">Register to start managing your assets and tickets</p>
+            </div>
+
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-body p-4 p-md-5">
                     <form asp-action="Register" method="post">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger border-0 small"></div>
 
-                        <div class="mb-3">
-                            <label asp-for="FullName" class="form-label"></label>
-                            <input asp-for="FullName" class="form-control" placeholder="John Doe" />
-                            <span asp-validation-for="FullName" class="text-danger"></span>
+                        <h6 class="text-uppercase text-muted fw-bold mb-3" style="font-size: 0.75rem; letter-spacing: 1px;">Personal Information</h6>
+
+                        <div class="form-floating mb-3">
+                            <input asp-for="FullName" class="form-control" id="regFullName" placeholder="John Doe" />
+                            <label asp-for="FullName">Full Name</label>
+                            <span asp-validation-for="FullName" class="text-danger x-small"></span>
                         </div>
 
-                        <div class="mb-3">
-                            <label asp-for="Email" class="form-label"></label>
-                            <input asp-for="Email" class="form-control" placeholder="john@example.com" />
-                            <span asp-validation-for="Email" class="text-danger"></span>
+                        <div class="form-floating mb-4">
+                            <input asp-for="Email" class="form-control" id="regEmail" placeholder="john@example.com" />
+                            <label asp-for="Email">Email Address</label>
+                            <span asp-validation-for="Email" class="text-danger x-small"></span>
                         </div>
 
-                        <hr />
+                        <h6 class="text-uppercase text-muted fw-bold mb-3" style="font-size: 0.75rem; letter-spacing: 1px;">Security Details</h6>
 
-                        <div class="mb-3">
-                            <label asp-for="Username" class="form-label"></label>
-                            <input asp-for="Username" class="form-control" />
-                            <span asp-validation-for="Username" class="text-danger"></span>
+                        <div class="form-floating mb-3">
+                            <input asp-for="Username" class="form-control" id="regUser" placeholder="Username" />
+                            <label asp-for="Username">Username</label>
+                            <span asp-validation-for="Username" class="text-danger x-small"></span>
                         </div>
 
                         <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="Password" class="form-label"></label>
-                                <input asp-for="Password" type="password" class="form-control" />
-                                <span asp-validation-for="Password" class="text-danger"></span>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input asp-for="Password" type="password" class="form-control" id="regPass" placeholder="Password" />
+                                    <label asp-for="Password">Password</label>
+                                    <span asp-validation-for="Password" class="text-danger x-small"></span>
+                                </div>
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="ConfirmPassword" class="form-label"></label>
-                                <input asp-for="ConfirmPassword" type="password" class="form-control" />
-                                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-4">
+                                    <input asp-for="ConfirmPassword" type="password" class="form-control" id="regConfirm" placeholder="Confirm" />
+                                    <label asp-for="ConfirmPassword">Confirm Password</label>
+                                    <span asp-validation-for="ConfirmPassword" class="text-danger x-small"></span>
+                                </div>
                             </div>
                         </div>
 
-                        <button type="submit" class="btn btn-success w-100">Register</button>
+                        
+
+                        <button type="submit" class="btn btn-success w-100 py-3 fw-bold rounded-3 shadow-sm">
+                            Complete Registration <i class="bi bi-arrow-right-short ms-1"></i>
+                        </button>
                     </form>
                 </div>
-                <div class="card-footer text-center">
-                    <a asp-action="Login">Already have an account? Login here.</a>
+                <div class="card-footer bg-light border-0 text-center py-3">
+                    <p class="mb-0 small text-muted">
+                        Already have a client account?
+                        <a asp-action="Login" class="text-success fw-bold text-decoration-none">Login here</a>
+                    </p>
                 </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <a asp-controller="Home" asp-action="Index" class="text-muted small text-decoration-none">
+                    <i class="bi bi-house"></i> Return to Home
+                </a>
             </div>
         </div>
     </div>

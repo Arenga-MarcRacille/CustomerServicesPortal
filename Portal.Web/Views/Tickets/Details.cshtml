@@ -165,3 +165,21 @@
         </div>
     </div>
 </div>
+
+<style>
+    .list-group-item {
+        position: relative;
+    }
+
+    .list-group-item::before {
+        content: "";
+        position: absolute;
+        left: -19px;
+        top: 8px;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: #6c757d;
+        border: 2px solid #fff;
+    }
+</style>

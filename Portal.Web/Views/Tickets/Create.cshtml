@@ -1,36 +1,88 @@
 ﻿@model Portal.Data.ViewModels.CreateTicketViewModel
 
-<h2>Submit a New Ticket</h2>
+@{
+    ViewData["Title"] = "New Support Request";
+}
 
-<div class="row">
-    <div class="col-md-6">
-        <form asp-action="Create" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<div class="container mt-4 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-controller="Dashboard" asp-action="Index">Dashboard</a></li>
+                    <li class="breadcrumb-item active">New Ticket</li>
+                </ol>
+            </nav>
 
-            <div class="mb-3">
-                <label asp-for="Title" class="form-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
+            <div class="card shadow border-0 rounded-3">
+                <div class="card-header bg-dark text-white p-3">
+                    <h4 class="mb-0"><i class="bi bi-pencil-square me-2"></i>Submit Support Request</h4>
+                </div>
+                <div class="card-body p-4 p-md-5">
+                    <form asp-action="Create" enctype="multipart/form-data" method="post">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger border-0 small"></div>
+
+                        <div class="row">
+                            <div class="col-12 mb-4">
+                                <label asp-for="Title" class="form-label fw-bold">Issue Title</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light"><i class="bi bi-type"></i></span>
+                                    <input asp-for="Title" class="form-control" placeholder="e.g., Water Leakage / Document Request" />
+                                </div>
+                                <span asp-validation-for="Title" class="text-danger small"></span>
+                                <div class="form-text">Briefly describe the core of your concern.</div>
+                            </div>
+
+                            <div class="col-md-6 mb-4">
+                                <label asp-for="AssetId" class="form-label fw-bold">Associated Asset</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light"><i class="bi bi-building"></i></span>
+                                    <select asp-for="AssetId" class="form-select" asp-items="ViewBag.AssetId">
+                                        <option value="">-- Choose your property --</option>
+                                    </select>
+                                </div>
+                                <span asp-validation-for="AssetId" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-4">
+                                <label asp-for="Attachment" class="form-label fw-bold">Upload Supporting Document</label>
+                                <div class="input-group">
+                                    <input asp-for="Attachment" type="file" class="form-control" id="inputGroupFile02">
+                                </div>
+                                <div class="form-text">Max size 5MB (PDF, PNG, JPG).</div>
+                            </div>
+
+                            <div class="col-12 mb-4">
+                                <label asp-for="Description" class="form-label fw-bold">Full Description</label>
+                                <textarea asp-for="Description" class="form-control" rows="5" placeholder="Please provide detailed information about your concern..."></textarea>
+                                <span asp-validation-for="Description" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center mt-2">
+                            <a asp-controller="Dashboard" asp-action="Index" class="btn btn-outline-secondary px-4">
+                                <i class="bi bi-x-circle me-1"></i> Cancel
+                            </a>
+                            <button type="submit" class="btn btn-success px-5 fw-bold shadow-sm">
+                                <i class="bi bi-send-check me-1"></i> Submit Ticket
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
 
-            <div class="mb-3">
-                <label asp-for="AssetId" class="form-label">Select Asset</label>
-                <select asp-for="AssetId" class="form-select" asp-items="ViewBag.AssetId"></select>
+            <div class="mt-4 p-3 bg-light rounded-3 border">
+                <small class="text-muted d-block">
+                    <i class="bi bi-info-circle-fill me-1 text-primary"></i>
+                    <strong>Note:</strong> Your ticket will be assigned a tracking number immediately after submission. You can track progress in your Dashboard.
+                </small>
             </div>
-
-            <div class="mb-3">
-                <label asp-for="Description" class="form-label"></label>
-                <textarea asp-for="Description" class="form-control" rows="4"></textarea>
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-
-            <div class="mb-3">
-                <label asp-for="Attachment" class="form-label"></label>
-                <input asp-for="Attachment" type="file" class="form-control" />
-            </div>
-
-            <button type="submit" class="btn btn-success">Submit Ticket</button>
-            <a asp-controller="Dashboard" asp-action="Index" class="btn btn-secondary">Cancel</a>
-        </form>
+        </div>
     </div>
 </div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
