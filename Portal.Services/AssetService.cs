@@ -32,5 +32,27 @@ namespace Portal.Services
             _context.Assets.Add(asset);
             await _context.SaveChangesAsync();
         }
+
+        public async Task DeleteAssetAsync(int id)
+        {
+            var asset = await _context.Assets.FindAsync(id);
+            if (asset != null)
+            {
+                _context.Assets.Remove(asset);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task<Assets> GetAssetByIdAsync(int id)
+        {
+            // Find the asset to populate the Edit form
+            return await _context.Assets.FindAsync(id);
+        }
+
+        public async Task UpdateAssetAsync(Assets asset)
+        {
+            _context.Assets.Update(asset);
+            await _context.SaveChangesAsync();
+        }
     }
 }

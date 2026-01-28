@@ -12,5 +12,10 @@ namespace Portal.Services.Interfaces
         Task<List<Clients>> GetAllClientsAsync();
         Task<List<Assets>> GetAllAssetsAsync();
         Task CreateAssetAsync(Assets asset);
+
+        Task DeleteAssetAsync(int id);
+
+        Task<Assets> GetAssetByIdAsync(int id);
+        Task UpdateAssetAsync(Assets asset);
     }
 }

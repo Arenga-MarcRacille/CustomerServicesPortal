@@ -73,6 +73,7 @@ namespace Portal.Services
                 .Include(t => t.TicketStatus)
                 .Include(t => t.Timelines)
                 .Include(t => t.Client)
+                .ThenInclude(c => c.User)
                 .Include(t => t.DocumentRequests)
                 .Include(t => t.Comments)
                 .ThenInclude(c => c.User)

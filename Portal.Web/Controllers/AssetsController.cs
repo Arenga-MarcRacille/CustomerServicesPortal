@@ -55,5 +55,74 @@ namespace Portal.Web.Controllers
 
             return View(asset);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                await _assetService.DeleteAssetAsync(id);
+                TempData["SuccessMessage"] = "Asset deleted successfully.";
+            }
+            catch (Exception)
+            {
+                // This catches the Foreign Key Constraint Violation
+                TempData["ErrorMessage"] = "Cannot delete this asset because it is currently assigned to existing Tickets. Please delete the tickets first.";
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        // GET: Edit Form
+        public async Task<IActionResult> Edit(int id)
+        {
+            var asset = await _assetService.GetAssetByIdAsync(id);
+            if (asset == null)
+            {
+                return NotFound();
+            }
+
+            var clients = await _assetService.GetAllClientsAsync();
+            // Pre-select the current owner
+            ViewBag.ClientId = new SelectList(clients, "ClientId", "FullName", asset.ClientId);
+
+            return View(asset);
+        }
+
+        // POST: Update Asset
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, Assets asset)
+        {
+            if (id != asset.AssetId)
+            {
+                return NotFound();
+            }
+
+            // Remove navigation property from validation
+            ModelState.Remove("Client");
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await _assetService.UpdateAssetAsync(asset);
+                    TempData["SuccessMessage"] = "Asset details updated successfully.";
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception)
+                {
+                    // Basic concurrency or DB error handling
+                    ModelState.AddModelError("", "Unable to save changes. Try again.");
+                }
+            }
+
+            // If validation fails, reload dropdown
+            var clients = await _assetService.GetAllClientsAsync();
+            ViewBag.ClientId = new SelectList(clients, "ClientId", "FullName", asset.ClientId);
+
+            return View(asset);
+        }
     }
 }
